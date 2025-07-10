@@ -1,6 +1,7 @@
 
 import SwiftUI
 import MapKit
+import CoreLocation
 
 struct WorkoutDetailView: View {
     let workout: WorkoutSession
@@ -12,7 +13,6 @@ struct WorkoutDetailView: View {
     var body: some View {
         VStack {
             HeatmapView(locations: locations)
-                .edgesIgnoringSafeArea(.all)
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Workout Details")
@@ -28,17 +28,37 @@ struct WorkoutDetailView: View {
                 HStack {
                     Text("Duration:")
                     Spacer()
-                    Text(String(format: "%.2f minutes", workout.duration / 60))
+                    Text(formatDuration(workout.duration))
                 }
                 
                 HStack {
                     Text("Distance:")
                     Spacer()
-                    Text(String(format: "%.2f meters", workout.totalDistance))
+                    Text(formatDistance(workout.totalDistance))
                 }
             }
             .padding()
         }
         .navigationTitle("Workout Heatmap")
+    }
+    
+    private func formatDuration(_ duration: TimeInterval) -> String {
+        if duration < 60 {
+            return "<1 minute"
+        }
+        
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .positional
+        formatter.zeroFormattingBehavior = .pad
+        
+        return formatter.string(from: duration) ?? "00:00:00"
+    }
+    
+    private func formatDistance(_ distance: Double) -> String {
+        let formatter = MeasurementFormatter()
+        formatter.unitOptions = .providedUnit
+        let measurement = Measurement(value: distance, unit: UnitLength.meters)
+        return formatter.string(from: measurement)
     }
 }

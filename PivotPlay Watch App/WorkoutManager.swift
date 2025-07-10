@@ -7,6 +7,7 @@ class WorkoutManager: NSObject, ObservableObject {
     // MARK: - Properties
     
     @Published var workoutState: HKWorkoutSessionState = .notStarted
+    @Published var authorizationState: AuthorizationState = .notDetermined
     @Published var duration: TimeInterval = 0
     @Published var distance: Double = 0
     @Published var heartRate: Double = 0
@@ -20,6 +21,20 @@ class WorkoutManager: NSObject, ObservableObject {
     private var heartRateSamples: [HeartRateSample] = []
     private var locationSamples: [LocationSample] = []
 
+    enum AuthorizationState {
+        case notDetermined
+        case processing
+        case authorized
+        case denied(String)
+    }
+    
+    var isAuthorized: Bool {
+        if case .authorized = authorizationState {
+            return true
+        }
+        return false
+    }
+
     // MARK: - Initialization & Authorization
     
     override init() {
@@ -29,6 +44,10 @@ class WorkoutManager: NSObject, ObservableObject {
     }
 
     func requestPermissions() {
+        DispatchQueue.main.async {
+            self.authorizationState = .processing
+        }
+
         // 1. HealthKit Permissions
         let typesToShare: Set = [HKObjectType.workoutType()]
         let typesToRead: Set = [
@@ -36,20 +55,26 @@ class WorkoutManager: NSObject, ObservableObject {
             HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)!
         ]
         
-        healthStore.requestAuthorization(toShare: typesToShare, read: typesToRead) { success, error in
-            if !success {
-                // Handle error
-                print("HealthKit Authorization Failed")
+        healthStore.requestAuthorization(toShare: typesToShare, read: typesToRead) { [weak self] success, error in
+            if success {
+                self?.locationManager.requestWhenInUseAuthorization()
+            } else {
+                DispatchQueue.main.async {
+                    self?.authorizationState = .denied("HealthKit authorization was denied. Please enable access in the Health app.")
+                }
             }
         }
-        
-        // 2. Location Permissions
-        locationManager.requestWhenInUseAuthorization()
     }
 
     // MARK: - Workout Control
     
     func startWorkout() {
+        guard isAuthorized else {
+            print("Cannot start workout, permissions not granted.")
+            requestPermissions()
+            return
+        }
+        
         // Reset previous workout data
         resetWorkout()
         
@@ -172,6 +197,25 @@ extension WorkoutManager: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location manager failed with error: \(error.localizedDescription)")
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .notDetermined:
+            break // still waiting
+        case .restricted, .denied:
+            DispatchQueue.main.async {
+                self.authorizationState = .denied("Location access is required for workouts. Please enable it in your iPhone's Settings app (Privacy > Location Services).")
+            }
+        case .authorizedWhenInUse, .authorizedAlways:
+            DispatchQueue.main.async {
+                self.authorizationState = .authorized
+            }
+        @unknown default:
+            DispatchQueue.main.async {
+                self.authorizationState = .denied("An unknown authorization error occurred.")
+            }
+        }
     }
 }
 
