@@ -2,6 +2,7 @@
 import Foundation
 import SwiftData
 
+#if os(iOS)
 @MainActor
 class WorkoutStorage {
     static let shared = WorkoutStorage()
@@ -36,4 +37,25 @@ class WorkoutStorage {
             return []
         }
     }
+    
+    func deleteWorkout(_ workout: WorkoutSession) {
+        context.delete(workout)
+        do {
+            try context.save()
+        } catch {
+            print("Failed to delete workout: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteWorkouts(_ workouts: [WorkoutSession]) {
+        for workout in workouts {
+            context.delete(workout)
+        }
+        do {
+            try context.save()
+        } catch {
+            print("Failed to delete workouts: \(error.localizedDescription)")
+        }
+    }
 }
+#endif

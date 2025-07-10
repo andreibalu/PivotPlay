@@ -17,7 +17,6 @@ struct ContentView: View {
                     title: "Start Workout",
                     systemImage: "figure.soccer",
                     action: {
-                        workoutManager.requestPermissions()
                         workoutManager.startWorkout()
                     }
                 )
