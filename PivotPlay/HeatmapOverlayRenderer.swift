@@ -2,6 +2,7 @@
 import MapKit
 
 class HeatmapOverlayRenderer: MKOverlayRenderer {
+    
     private var locations: [CLLocation]
 
     init(overlay: MKOverlay, locations: [CLLocation]) {
@@ -10,27 +11,39 @@ class HeatmapOverlayRenderer: MKOverlayRenderer {
     }
 
     override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
-        let locationsInRect = locations.filter { mapRect.contains(MKMapPoint($0.coordinate)) }
+        let rect = self.rect(for: mapRect)
         
-        guard !locationsInRect.isEmpty else { return }
-
-        let alpha: CGFloat = 0.5
-        let colors: [UIColor] = [.blue, .green, .yellow, .red]
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let gradient = CGGradient(colorsSpace: colorSpace,
-                                  colors: colors.map { $0.withAlphaComponent(alpha).cgColor } as CFArray,
-                                  locations: [0.25, 0.5, 0.75, 1.0])!
-
-        for location in locationsInRect {
+        let heatmap = CIImage(color: CIColor(red: 0, green: 0, blue: 0, alpha: 0))
+            .cropped(to: rect)
+        
+        let coloredHeatmap = locations.reduce(heatmap) { (heatmap, location) -> CIImage in
             let point = self.point(for: MKMapPoint(location.coordinate))
-            let radius = 20 * zoomScale
-            let center = point
-            context.drawRadialGradient(gradient,
-                                       startCenter: center,
-                                       startRadius: 0,
-                                       endCenter: center,
-                                       endRadius: radius,
-                                       options: .drawsAfterEndLocation)
+            
+            // Adjust radius based on zoomScale for better visual representation
+            let radius = 100 * (1 / zoomScale)
+
+            let radialGradient = CIFilter(name: "CIRadialGradient", parameters: [
+                "inputCenter": CIVector(x: point.x, y: point.y),
+                "inputRadius0": radius * 0.5,
+                "inputRadius1": radius,
+                "inputColor0": CIColor(red: 0, green: 1, blue: 0, alpha: 0.3),
+                "inputColor1": CIColor(red: 1, green: 0, blue: 0, alpha: 0)
+            ])!
+
+            return radialGradient.outputImage!.composited(over: heatmap)
+        }
+        
+        let colorControls = CIFilter(name: "CIColorControls", parameters: [
+            kCIInputImageKey: coloredHeatmap,
+            kCIInputSaturationKey: 1.5,
+            kCIInputBrightnessKey: 0.1,
+            kCIInputContrastKey: 1.25
+        ])!
+
+        let blurred = colorControls.outputImage!.clampedToExtent().applyingFilter("CIGaussianBlur", parameters: [kCIInputRadiusKey: 30])
+        
+        if let outputImage = CIContext().createCGImage(blurred, from: rect) {
+            context.draw(outputImage, in: rect)
         }
     }
 }
