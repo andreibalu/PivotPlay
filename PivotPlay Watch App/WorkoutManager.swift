@@ -44,11 +44,43 @@ class WorkoutManager: NSObject, ObservableObject {
     }
 
     func requestPermissions() {
+        // Check current authorization status first
+        checkAuthorizationStatus()
+    }
+    
+    private func checkAuthorizationStatus() {
+        // Check HealthKit authorization status
+        let heartRateAuth = healthStore.authorizationStatus(for: HKObjectType.quantityType(forIdentifier: .heartRate)!)
+        let distanceAuth = healthStore.authorizationStatus(for: HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)!)
+        
+        let healthKitAuthorized = heartRateAuth == .sharingAuthorized && distanceAuth == .sharingAuthorized
+        let locationAuthorized = isLocationAuthorized()
+        
+        if healthKitAuthorized && locationAuthorized {
+            DispatchQueue.main.async {
+                self.authorizationState = .authorized
+            }
+            return
+        }
+        
+        // Only request permissions if not already authorized
+        if !healthKitAuthorized {
+            requestHealthKitPermissions()
+        } else if !locationAuthorized {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    
+    private func isLocationAuthorized() -> Bool {
+        let status = locationManager.authorizationStatus
+        return status == .authorizedWhenInUse || status == .authorizedAlways
+    }
+    
+    private func requestHealthKitPermissions() {
         DispatchQueue.main.async {
             self.authorizationState = .processing
         }
 
-        // 1. HealthKit Permissions
         let typesToShare: Set = [HKObjectType.workoutType()]
         let typesToRead: Set = [
             HKObjectType.quantityType(forIdentifier: .heartRate)!,
@@ -57,7 +89,14 @@ class WorkoutManager: NSObject, ObservableObject {
         
         healthStore.requestAuthorization(toShare: typesToShare, read: typesToRead) { [weak self] success, error in
             if success {
-                self?.locationManager.requestWhenInUseAuthorization()
+                // After HealthKit approval, check location permissions
+                DispatchQueue.main.async {
+                    if self?.isLocationAuthorized() == true {
+                        self?.authorizationState = .authorized
+                    } else {
+                        self?.locationManager.requestWhenInUseAuthorization()
+                    }
+                }
             } else {
                 DispatchQueue.main.async {
                     self?.authorizationState = .denied("HealthKit authorization was denied. Please enable access in the Health app.")
