@@ -6,19 +6,30 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var workouts: [WorkoutSession]
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            List(workouts) { workout in
+                NavigationLink(destination: WorkoutDetailView(workout: workout)) {
+                    VStack(alignment: .leading) {
+                        Text(workout.date, style: .date)
+                            .font(.headline)
+                        Text(String(format: "%.2f minutes", workout.duration / 60))
+                            .font(.subheadline)
+                    }
+                }
+            }
+            .navigationTitle("Workouts")
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+        .modelContainer(for: WorkoutSession.self, inMemory: true)
 }

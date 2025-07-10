@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct PivotPlayApp: App {
+    
+    init() {
+        _ = WatchConnectivityManager.shared
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: WorkoutSession.self)
     }
 }

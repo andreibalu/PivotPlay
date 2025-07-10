@@ -39,9 +39,22 @@
 		759B514B2E1FF6FD00DC39B6 /* PivotPlay Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PivotPlay Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		759B51622E1FFC7C00DC39B6 /* Exceptions for "PivotPlay" folder in "PivotPlay Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SharedModels.swift,
+			);
+			target = 759B514A2E1FF6FD00DC39B6 /* PivotPlay Watch App */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		759B51402E1FF6FB00DC39B6 /* PivotPlay */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				759B51622E1FFC7C00DC39B6 /* Exceptions for "PivotPlay" folder in "PivotPlay Watch App" target */,
+			);
 			path = PivotPlay;
 			sourceTree = "<group>";
 		};
@@ -339,12 +352,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "PivotPlay Watch App/PivotPlay Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WR23UX8DY4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "PivotPlay-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = PivotPlay;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We need to access your health data to track your soccer workout metrics like heart rate";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to track your position and generate a heatmap of your workout";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = baludev.PivotPlay;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -368,12 +385,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "PivotPlay Watch App/PivotPlay Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WR23UX8DY4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "PivotPlay-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = PivotPlay;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We need to access your health data to track your soccer workout metrics like heart rate";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to track your position and generate a heatmap of your workout";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = baludev.PivotPlay;
 				LD_RUNPATH_SEARCH_PATHS = (
