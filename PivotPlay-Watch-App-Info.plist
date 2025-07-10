@@ -14,5 +14,7 @@
 	<array>
 		<string>workout-processing</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>PivotPlay uses your location to track your position on the field and create a heatmap of your activity during a workout.</string>
 </dict>
 </plist>

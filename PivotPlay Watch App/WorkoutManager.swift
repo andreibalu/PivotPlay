@@ -24,7 +24,7 @@ class WorkoutManager: NSObject, ObservableObject {
     
     override init() {
         super.init()
-        // locationManager.delegate = self
+        locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
 
@@ -76,7 +76,7 @@ class WorkoutManager: NSObject, ObservableObject {
                 }
             }
             
-            // locationManager.startUpdatingLocation()
+            locationManager.startUpdatingLocation()
             
             // Start the timer to update the UI
             startTimer()
@@ -92,7 +92,7 @@ class WorkoutManager: NSObject, ObservableObject {
 
     func stopWorkout() {
         workoutSession?.end()
-        // locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingLocation()
         stopTimer()
         
         DispatchQueue.main.async {
@@ -161,6 +161,20 @@ class WorkoutManager: NSObject, ObservableObject {
     }
     */
 }
+
+// MARK: - CLLocationManagerDelegate
+extension WorkoutManager: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        let locationSample = LocationSample(coordinate: location.coordinate, timestamp: location.timestamp)
+        self.locationSamples.append(locationSample)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location manager failed with error: \(error.localizedDescription)")
+    }
+}
+
 
 // MARK: - HKWorkoutSessionDelegate & HKLiveWorkoutBuilderDelegate
 extension WorkoutManager: HKWorkoutSessionDelegate, HKLiveWorkoutBuilderDelegate {
