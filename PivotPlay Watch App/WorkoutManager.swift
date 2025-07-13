@@ -3,6 +3,10 @@ import HealthKit
 import CoreLocation
 import Combine
 
+#if os(watchOS)
+import WatchKit
+#endif
+
 class WorkoutManager: NSObject, ObservableObject {
     // MARK: - Properties
     
@@ -12,6 +16,9 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var distance: Double = 0
     @Published var heartRate: Double = 0
     
+    // MARK: - Corner Capture Properties
+    @Published var showingCornerCapture = false
+    
     private var healthStore = HKHealthStore()
     private var locationManager = CLLocationManager()
     private var workoutSession: HKWorkoutSession?
@@ -20,6 +27,11 @@ class WorkoutManager: NSObject, ObservableObject {
     private var timer: Timer?
     private var heartRateSamples: [HeartRateSample] = []
     private var locationSamples: [LocationSample] = []
+    
+    // MARK: - Pitch Corner Management
+    private var cornerPoints: [CLLocationCoordinate2D] = []
+    private var workoutPath: [CLLocationCoordinate2D] = []
+    private var isCapturingCorners = false
 
     enum AuthorizationState {
         case notDetermined
@@ -41,10 +53,10 @@ class WorkoutManager: NSObject, ObservableObject {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 1.0  // Update every meter for heatmap precision
     }
 
     func requestPermissions() {
-        // Check current authorization status first
         checkAuthorizationStatus()
     }
     
@@ -73,7 +85,11 @@ class WorkoutManager: NSObject, ObservableObject {
     
     private func isLocationAuthorized() -> Bool {
         let status = locationManager.authorizationStatus
+        #if os(watchOS)
         return status == .authorizedWhenInUse || status == .authorizedAlways
+        #else
+        return status == .authorized
+        #endif
     }
     
     private func requestHealthKitPermissions() {
@@ -105,12 +121,51 @@ class WorkoutManager: NSObject, ObservableObject {
         }
     }
 
+    // MARK: - Corner Capture Methods
+    
+    func initiateWorkout() {
+        guard isAuthorized else {
+            print("Cannot start workout, permissions not granted.")
+            requestPermissions()
+            return
+        }
+        
+        showingCornerCapture = true
+    }
+    
+    func startCornerCapture() {
+        isCapturingCorners = true
+        cornerPoints.removeAll()
+        locationManager.startUpdatingLocation()
+    }
+    
+    func markCurrentCorner() {
+        guard isCapturingCorners,
+              let currentLocation = locationManager.location else {
+            print("Cannot mark corner: not capturing or no location available")
+            return
+        }
+        
+        cornerPoints.append(currentLocation.coordinate)
+        print("Corner \(cornerPoints.count) marked at: \(currentLocation.coordinate)")
+        
+        // Provide haptic feedback
+        #if os(watchOS)
+        WKInterfaceDevice.current().play(.click)
+        #endif
+    }
+
     // MARK: - Workout Control
     
     func startWorkout() {
         guard isAuthorized else {
             print("Cannot start workout, permissions not granted.")
             requestPermissions()
+            return
+        }
+        
+        guard cornerPoints.count == 4 else {
+            print("Cannot start workout: need exactly 4 corners marked")
             return
         }
         
@@ -122,6 +177,7 @@ class WorkoutManager: NSObject, ObservableObject {
         configuration.locationType = .outdoor
 
         do {
+            #if os(watchOS)
             workoutSession = try HKWorkoutSession(healthStore: healthStore, configuration: configuration)
             workoutBuilder = workoutSession?.associatedWorkoutBuilder()
             
@@ -129,6 +185,7 @@ class WorkoutManager: NSObject, ObservableObject {
                 liveBuilder.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: configuration)
                 liveBuilder.delegate = self
             }
+            #endif
             
             workoutSession?.delegate = self
             
@@ -140,7 +197,11 @@ class WorkoutManager: NSObject, ObservableObject {
                 }
             }
             
-            locationManager.startUpdatingLocation()
+            // Enhanced location tracking for heatmap
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.distanceFilter = 0.5  // More frequent updates during workout
+            isCapturingCorners = false
+            workoutPath.removeAll()
             
             // Start the timer to update the UI
             startTimer()
@@ -170,6 +231,7 @@ class WorkoutManager: NSObject, ObservableObject {
         heartRate = 0
         heartRateSamples = []
         locationSamples = []
+        workoutPath = []
         workoutState = .notStarted
     }
 
@@ -211,25 +273,27 @@ class WorkoutManager: NSObject, ObservableObject {
             }
         }
     }
-    
-    // MARK: - CLLocationManagerDelegate
-    /*
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        let locationSample = LocationSample(coordinate: location.coordinate, timestamp: location.timestamp)
-        self.locationSamples.append(locationSample)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location manager failed with error: \(error.localizedDescription)")
-    }
-    */
 }
 
 // MARK: - CLLocationManagerDelegate
 extension WorkoutManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
+        
+        // Filter out inaccurate readings
+        guard location.horizontalAccuracy <= 15 else { return }
+        
+        if isCapturingCorners {
+            // During corner capture, we don't store path data
+            return
+        }
+        
+        if workoutState == .running {
+            // Store high-frequency location data for heatmap
+            workoutPath.append(location.coordinate)
+        }
+        
+        // Continue storing LocationSample for backward compatibility
         let locationSample = LocationSample(coordinate: location.coordinate, timestamp: location.timestamp)
         self.locationSamples.append(locationSample)
     }
@@ -258,7 +322,6 @@ extension WorkoutManager: CLLocationManagerDelegate {
     }
 }
 
-
 // MARK: - HKWorkoutSessionDelegate & HKLiveWorkoutBuilderDelegate
 extension WorkoutManager: HKWorkoutSessionDelegate, HKLiveWorkoutBuilderDelegate {
     
@@ -273,7 +336,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate, HKLiveWorkoutBuilderDelegate
                 self.workoutBuilder?.finishWorkout { (workout, error) in
                     DispatchQueue.main.async {
                         self.workoutState = .ended
-                        self.packageAndSendWorkout()
+                        self.packageAndSendPitchData()
                     }
                 }
             }
@@ -297,8 +360,34 @@ extension WorkoutManager: HKWorkoutSessionDelegate, HKLiveWorkoutBuilderDelegate
         // Not used in this MVP
     }
     
-    // MARK: - Data Transfer
+    // MARK: - Enhanced Data Transfer
     
+    private func packageAndSendPitchData() {
+        guard cornerPoints.count == 4 else {
+            print("Cannot send pitch data: corners not properly captured")
+            // Fallback to legacy data transfer
+            packageAndSendWorkout()
+            return
+        }
+        
+        let pitchData = PitchDataTransfer(
+            workoutId: UUID(),
+            date: Date(),
+            duration: self.duration,
+            totalDistance: self.distance,
+            heartRateData: self.heartRateSamples,
+            corners: self.cornerPoints,
+            path: self.workoutPath
+        )
+        
+        WatchConnectivityManager.shared.sendPitchData(pitchData)
+        
+        print("Pitch data packaged and sent to iPhone.")
+        print("Duration: \(pitchData.duration), Distance: \(pitchData.totalDistance)")
+        print("Corners: \(pitchData.corners.count), Path points: \(pitchData.path.count)")
+    }
+    
+    // Legacy method for backward compatibility
     private func packageAndSendWorkout() {
         let workoutDTO = WorkoutSessionDTO(
             id: UUID(),

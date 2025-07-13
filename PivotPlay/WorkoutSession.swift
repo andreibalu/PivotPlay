@@ -8,7 +8,7 @@ import SwiftData
 #if os(iOS)
 // The main data model for a completed workout session.
 @Model
-final class WorkoutSession: Identifiable {
+final class WorkoutSession: Identifiable, Sendable {
     @Attribute(.unique) var id: UUID
     var date: Date
     var duration: TimeInterval // Total duration in seconds
