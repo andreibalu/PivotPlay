@@ -6,8 +6,8 @@ This document outlines the end-to-end pipeline for capturing a player's position
 
 ### UI Flow
 1. When the user taps **Start**, push `CornerCaptureView` onto the navigation stack.
-2. Display instructional text prompting the player to walk to the *current* corner and press the Digital Crown.
-3. Each Crown press records the current `CLLocationCoordinate2D` in `cornerPoints` and updates the prompt (e.g. *“Corner 2/4 marked”*).
+2. Display instructional text (now with smaller fonts for better visibility) prompting the player to walk to the *current* corner and tap the **Mark Corner** button.
+3. Each button tap records the current `CLLocationCoordinate2D` in `cornerPoints` and updates the prompt (e.g. *“Corner 2/4 marked”*).
 4. After four corners are recorded:
    * Persist `cornerPoints` (exactly four) in memory.
    * Present **“Pitch saved – tap to start workout.”**

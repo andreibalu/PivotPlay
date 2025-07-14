@@ -2,6 +2,7 @@
 import SwiftUI
 import MapKit
 import CoreLocation
+import Foundation
 
 struct WorkoutDetailView: View {
     let workout: WorkoutSession
@@ -154,8 +155,18 @@ struct WorkoutDetailView: View {
         .navigationTitle("Workout Detail")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            // If this workout has new pitch data, it would already be processed
-            // This is mainly for backward compatibility display
+            if let corners = workout.corners, !corners.isEmpty {
+                let pitchData = PitchDataTransfer(
+                    workoutId: workout.id,
+                    date: workout.date,
+                    duration: workout.duration,
+                    totalDistance: workout.totalDistance,
+                    heartRateData: workout.heartRateData,
+                    corners: corners.map { $0.coordinate },
+                    locationData: workout.locationData
+                )
+                heatmapPipeline.ingest(pitchData)
+            }
         }
     }
     

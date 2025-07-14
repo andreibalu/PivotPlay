@@ -63,7 +63,7 @@ class WorkoutManager: NSObject, ObservableObject {
     private func checkAuthorizationStatus() {
         // Check HealthKit authorization status
         let heartRateAuth = healthStore.authorizationStatus(for: HKObjectType.quantityType(forIdentifier: .heartRate)!)
-        let distanceAuth = healthStore.authorizationStatus(for: HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)!)
+        let distanceAuth = healthStore.authorizationStatus(for: HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!)
         
         let healthKitAuthorized = heartRateAuth == .sharingAuthorized && distanceAuth == .sharingAuthorized
         let locationAuthorized = isLocationAuthorized()
@@ -139,20 +139,29 @@ class WorkoutManager: NSObject, ObservableObject {
         locationManager.startUpdatingLocation()
     }
     
-    func markCurrentCorner() {
+    func markCurrentCorner() -> Bool {
         guard isCapturingCorners,
               let currentLocation = locationManager.location else {
             print("Cannot mark corner: not capturing or no location available")
-            return
+            return false
         }
         
         cornerPoints.append(currentLocation.coordinate)
         print("Corner \(cornerPoints.count) marked at: \(currentLocation.coordinate)")
         
-        // Provide haptic feedback
         #if os(watchOS)
         WKInterfaceDevice.current().play(.click)
         #endif
+        return true
+    }
+
+    func validateCorners() -> Bool {
+        guard cornerPoints.count == 4 else { return false }
+        return !cornerPoints.contains { $0.latitude == 0.0 && $0.longitude == 0.0 }
+    }
+
+    func resetCorners() {
+        cornerPoints.removeAll()
     }
 
     // MARK: - Workout Control
@@ -370,6 +379,8 @@ extension WorkoutManager: HKWorkoutSessionDelegate, HKLiveWorkoutBuilderDelegate
             return
         }
         
+        print("Packaging pitch data with \(self.locationSamples.count) location points")
+        
         let pitchData = PitchDataTransfer(
             workoutId: UUID(),
             date: Date(),
@@ -377,14 +388,14 @@ extension WorkoutManager: HKWorkoutSessionDelegate, HKLiveWorkoutBuilderDelegate
             totalDistance: self.distance,
             heartRateData: self.heartRateSamples,
             corners: self.cornerPoints,
-            path: self.workoutPath
+            locationData: self.locationSamples
         )
         
         WatchConnectivityManager.shared.sendPitchData(pitchData)
         
         print("Pitch data packaged and sent to iPhone.")
         print("Duration: \(pitchData.duration), Distance: \(pitchData.totalDistance)")
-        print("Corners: \(pitchData.corners.count), Path points: \(pitchData.path.count)")
+        print("Corners: \(pitchData.corners.count), Location points: \(pitchData.locationData.count)")
     }
     
     // Legacy method for backward compatibility

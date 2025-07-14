@@ -31,6 +31,7 @@ This roadmap outlines the core milestones to build a functional Minimum Viable P
         *   Request user permission for "When in Use" location access.
         *   Continuously record the user's GPS coordinates during the workout session.
     4.  **Data Packaging:** When the user stops the workout, gather all the tracked data into the `WorkoutSession` model created in Phase 1.
+    5.  **Heatmap Corner Capture Improvement:** Marking pitch corners for the heatmap is now done by tapping a button on the watch (instead of using the Digital Crown), and the instructional UI uses smaller fonts for better visibility.
 
 ---
 
@@ -46,6 +47,7 @@ This roadmap outlines the core milestones to build a functional Minimum Viable P
         *   Create a detail screen that is shown when a user taps a workout from the list.
         *   Integrate **MapKit** to display a map.
         *   Develop the logic to render the `locationData` from the selected workout as a heatmap overlay on the map.
+        *   The heatmap overlay now uses pitch corners marked by button tap for improved usability.
 
 ---
 
@@ -68,4 +70,4 @@ This roadmap outlines the core milestones to build a functional Minimum Viable P
 *   **Key Tasks:**
     1.  **End-to-End Testing:** Test the complete user flow on physical devices: start a workout on the watch, end it, and verify it appears correctly on the iPhone with a functional heatmap.
     2.  **Error Handling:** Add basic error handling (e.g., what happens if the user denies HealthKit or location permissions?).
-    3.  **Refine UI/UX:** Polish the user interface and ensure the experience is smooth and intuitive.
+    3.  **Refine UI/UX:** Polish the user interface and ensure the experience is smooth and intuitive. (Note: The heatmap corner marking process now uses a button for improved reliability and smaller fonts for clarity.)

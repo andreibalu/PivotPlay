@@ -30,7 +30,7 @@ class HeatmapPipeline: ObservableObject {
             UserDefaults.standard.set(try? JSONEncoder().encode(transfer.corners), forKey: "SavedPitchCorners")
             
             // Filter low-accuracy points (would need accuracy info from CLLocation)
-            let filteredPath = transfer.path
+            let filteredPath = transfer.locationData
             
             // Transform coordinates
             let corners = transfer.corners.map { $0.coordinate }

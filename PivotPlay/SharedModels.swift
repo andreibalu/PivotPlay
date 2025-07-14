@@ -88,17 +88,17 @@ struct PitchDataTransfer: Codable {
     let totalDistance: Double
     let heartRateData: [HeartRateSample]
     let corners: [CoordinateDTO]          // Exactly 4 pitch corners
-    let path: [CoordinateDTO]             // Player's workout path
+    let locationData: [LocationSample]    // Player's workout path with timestamps
     
     init(workoutId: UUID, date: Date, duration: TimeInterval, totalDistance: Double, 
-         heartRateData: [HeartRateSample], corners: [CLLocationCoordinate2D], path: [CLLocationCoordinate2D]) {
+         heartRateData: [HeartRateSample], corners: [CLLocationCoordinate2D], locationData: [LocationSample]) {
         self.workoutId = workoutId
         self.date = date
         self.duration = duration
         self.totalDistance = totalDistance
         self.heartRateData = heartRateData
         self.corners = corners.map { CoordinateDTO(from: $0) }
-        self.path = path.map { CoordinateDTO(from: $0) }
+        self.locationData = locationData
     }
 }
 
@@ -171,7 +171,7 @@ struct CoordinateTransformer {
 
 // MARK: - Watch Connectivity Manager
 
-class WatchConnectivityManager: NSObject, WCSessionDelegate {
+class WatchConnectivityManager: NSObject, @preconcurrency WCSessionDelegate {
     static let shared = WatchConnectivityManager()
     private let session: WCSession = .default
     
@@ -257,12 +257,26 @@ class WatchConnectivityManager: NSObject, WCSessionDelegate {
         }
     }
     
-    func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
+    @MainActor func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
+        print("Received message data of size \(messageData.count) bytes")
         do {
             let decoder = JSONDecoder()
             let pitchData = try decoder.decode(PitchDataTransfer.self, from: messageData)
+            print("Successfully decoded pitch data for workout \(pitchData.workoutId), with \(pitchData.locationData.count) location points")
             
             #if os(iOS)
+            let workout = WorkoutSession(
+                id: pitchData.workoutId,
+                date: pitchData.date,
+                duration: pitchData.duration,
+                totalDistance: pitchData.totalDistance,
+                heartRateData: pitchData.heartRateData,
+                locationData: pitchData.locationData,
+                corners: pitchData.corners
+            )
+            WorkoutStorage.shared.saveWorkout(workout)
+            print("Workout saved successfully")
+            
             Task {
                 await MainActor.run {
                     HeatmapPipeline.shared.ingest(pitchData)

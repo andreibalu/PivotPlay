@@ -101,86 +101,125 @@ struct ContentView: View {
 
 // MARK: - Corner Capture View
 
+struct MiniFootballFieldView: View {
+    let markedCorners: Int
+    private let fieldColor = Color.green.opacity(0.2)
+    private let markerColor = Color.blue
+    private let markedColor = Color.green
+    private let size: CGFloat = 80
+    
+    var body: some View {
+        ZStack {
+            // Field rectangle
+            RoundedRectangle(cornerRadius: 8)
+                .fill(fieldColor)
+                .frame(width: size, height: size * 0.6)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.green, lineWidth: 2)
+                )
+            // Corner markers
+            ForEach(0..<4) { idx in
+                Circle()
+                    .fill(idx < markedCorners ? markedColor : markerColor)
+                    .frame(width: 10, height: 10)
+                    .position(position(for: idx))
+                    .overlay(
+                        Text("\(idx+1)")
+                            .font(.system(size: 7, weight: .bold))
+                            .foregroundColor(.white)
+                    )
+            }
+        }
+        .frame(width: size, height: size * 0.6)
+    }
+    // Corner positions: 0=BL, 1=BR, 2=TR, 3=TL
+    private func position(for idx: Int) -> CGPoint {
+        let w = size
+        let h = size * 0.6
+        switch idx {
+        case 0: return CGPoint(x: 0, y: h) // Bottom Left
+        case 1: return CGPoint(x: w, y: h) // Bottom Right
+        case 2: return CGPoint(x: w, y: 0) // Top Right
+        case 3: return CGPoint(x: 0, y: 0) // Top Left
+        default: return .zero
+        }
+    }
+}
+
 struct CornerCaptureView: View {
     @ObservedObject var workoutManager: WorkoutManager
     @State private var currentCorner = 0
+    @State private var validationFailed = false
+    @State private var showLocationError = false
     @Environment(\.dismiss) private var dismiss
     
     private let cornerNames = ["Bottom Left", "Bottom Right", "Top Right", "Top Left"]
     
     var body: some View {
-        VStack(spacing: 15) { // Reduced spacing
+        VStack(spacing: 8) {
             // Progress indicator
-            VStack(spacing: 5) { // Reduced spacing
+            VStack(spacing: 2) {
                 Image(systemName: "location.circle")
-                    .font(.title2) // Slightly smaller
+                    .font(.title3)
                     .foregroundColor(.blue)
-                
                 Text("Pitch Setup")
-                    .font(.headline)
+                    .font(.subheadline)
                     .fontWeight(.semibold)
-                
                 Text("\(currentCorner)/4 corners marked")
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundColor(.secondary)
             }
-            
-            Spacer()
-            
+            // Mini field with corner markers
+            MiniFootballFieldView(markedCorners: currentCorner)
+                .padding(.vertical, 4)
             if currentCorner < 4 {
-                // Instructions for current corner
-                VStack(spacing: 8) { // Reduced spacing
-                    Text("Walk to the")
-                        .font(.body) // Smaller font
-                    
-                    Text(cornerNames[currentCorner])
-                        .font(.headline) // Smaller font
-                        .fontWeight(.bold)
-                        .foregroundColor(.blue)
-                    
-                    Text("corner and tap the button")
-                        .font(.body) // Smaller font
-                }
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-                
-                Spacer()
-                
+                // Visual instruction: highlight which corner to mark
+                Text("Tap when at corner \(currentCorner+1)")
+                    .font(.caption)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 2)
                 // Button to mark corner
                 Button(action: {
-                    workoutManager.markCurrentCorner()
-                    currentCorner += 1
+                    if workoutManager.markCurrentCorner() {
+                        currentCorner += 1
+                        if currentCorner == 4 {
+                            if workoutManager.validateCorners() {
+                                // All good
+                            } else {
+                                validationFailed = true
+                                workoutManager.resetCorners()
+                                currentCorner = 0
+                            }
+                        }
+                    } else {
+                        showLocationError = true
+                    }
                 }) {
-                    Text("Mark Corner \(currentCorner + 1)")
-                        .font(.headline)
+                    Text("Mark Corner \(currentCorner+1)")
+                        .font(.subheadline)
                         .fontWeight(.bold)
-                        .padding()
+                        .padding(8)
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .cornerRadius(8)
                 }
                 .buttonStyle(PlainButtonStyle())
-
             } else {
                 // All corners captured
-                VStack(spacing: 16) {
+                VStack(spacing: 8) {
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 50))
+                        .font(.system(size: 40))
                         .foregroundColor(.green)
-                    
                     Text("Pitch Saved!")
-                        .font(.title2)
+                        .font(.headline)
                         .fontWeight(.bold)
-                    
-                    Text("Tap to start workout")
-                        .font(.body)
+                    Text("Start workout")
+                        .font(.caption)
                         .foregroundColor(.secondary)
-                    
-                    Spacer()
-                    
                     StartButton(
-                        title: "Start Workout",
+                        title: "Start",
                         systemImage: "play.circle.fill",
                         action: {
                             workoutManager.startWorkout()
@@ -190,10 +229,20 @@ struct CornerCaptureView: View {
                 }
             }
         }
-        .padding()
+        .padding(8)
         .navigationBarHidden(true)
         .onAppear {
             workoutManager.startCornerCapture()
+        }
+        .alert("Location Error", isPresented: $showLocationError) {
+            Button("OK") { }
+        } message: {
+            Text("No location available. Please ensure GPS is active and try again.")
+        }
+        .alert("Invalid Corners", isPresented: $validationFailed) {
+            Button("Retry") { }
+        } message: {
+            Text("Invalid corner points detected. Please retry corner capture.")
         }
     }
 }

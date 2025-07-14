@@ -1,0 +1,17 @@
+# PivotPlay Project: Build & Simulator Guide
+
+- **iPhone App Target:**
+  - Scheme: `PivotPlay`
+  - Recommended Simulator: `Iph16+watch10` (UUID: 7F8FDE71-03D1-4061-9A4C-B066855786E6)
+
+- **Watch App Target:**
+  - Scheme: `PivotPlay Watch App`
+  - Recommended Simulator: `Apple Watch Series 10 (46mm)` (UUID: B5890AA6-7A30-4898-8E6F-E4D2DCD51100)
+
+- For most development and testing, use the above schemes and simulators to avoid build and deployment issues.
+
+- If you encounter build errors related to device/simulator selection, verify you are using the correct scheme and simulator UUID as listed above.
+description:
+globs:
+alwaysApply: false
+---
