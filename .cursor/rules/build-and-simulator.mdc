@@ -13,5 +13,5 @@
 - If you encounter build errors related to device/simulator selection, verify you are using the correct scheme and simulator UUID as listed above.
 description:
 globs:
-alwaysApply: false
+alwaysApply: true
 ---
