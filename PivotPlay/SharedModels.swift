@@ -1,6 +1,17 @@
 import Foundation
 import CoreLocation
 import WatchConnectivity
+import CryptoKit
+
+// MARK: - Data Extensions
+
+extension Data {
+    /// Calculate SHA256 hash of the data
+    var sha256: String {
+        let digest = SHA256.hash(data: self)
+        return digest.compactMap { String(format: "%02x", $0) }.joined()
+    }
+}
 
 // MARK: - Existing Models
 
@@ -169,11 +180,135 @@ struct CoordinateTransformer {
     }
 }
 
-// MARK: - Watch Connectivity Manager
+// MARK: - Enhanced Data Transfer Models
+
+// Validated data transfer structure with checksum verification
+struct ValidatedPitchDataTransfer: Codable {
+    let schemaVersion: Int
+    let workoutId: UUID
+    let date: Date
+    let duration: TimeInterval
+    let totalDistance: Double
+    let heartRateData: [HeartRateSample]
+    let corners: [CoordinateDTO]
+    let locationData: [LocationSample]
+    let checksum: String
+    let transferId: UUID
+    
+    init(from pitchData: PitchDataTransfer) {
+        self.schemaVersion = 1
+        self.workoutId = pitchData.workoutId
+        self.date = pitchData.date
+        self.duration = pitchData.duration
+        self.totalDistance = pitchData.totalDistance
+        self.heartRateData = pitchData.heartRateData
+        self.corners = pitchData.corners
+        self.locationData = pitchData.locationData
+        self.transferId = UUID()
+        self.checksum = Self.calculateChecksum(for: pitchData)
+    }
+    
+    // Full initializer for testing
+    init(schemaVersion: Int, workoutId: UUID, date: Date, duration: TimeInterval, totalDistance: Double, heartRateData: [HeartRateSample], corners: [CoordinateDTO], locationData: [LocationSample], checksum: String, transferId: UUID) {
+        self.schemaVersion = schemaVersion
+        self.workoutId = workoutId
+        self.date = date
+        self.duration = duration
+        self.totalDistance = totalDistance
+        self.heartRateData = heartRateData
+        self.corners = corners
+        self.locationData = locationData
+        self.checksum = checksum
+        self.transferId = transferId
+    }
+    
+    // Calculate SHA256 checksum for data integrity verification
+    private static func calculateChecksum(for pitchData: PitchDataTransfer) -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        encoder.dateEncodingStrategy = .iso8601
+        
+        guard let data = try? encoder.encode(pitchData) else {
+            return ""
+        }
+        
+        return data.sha256
+    }
+    
+    // Validate data integrity
+    func isValid() -> Bool {
+        let originalData = PitchDataTransfer(
+            workoutId: workoutId,
+            date: date,
+            duration: duration,
+            totalDistance: totalDistance,
+            heartRateData: heartRateData,
+            corners: corners.map { $0.coordinate },
+            locationData: locationData
+        )
+        
+        let calculatedChecksum = Self.calculateChecksum(for: originalData)
+        return calculatedChecksum == checksum && !checksum.isEmpty
+    }
+    
+    // Convert back to PitchDataTransfer
+    var pitchData: PitchDataTransfer {
+        PitchDataTransfer(
+            workoutId: workoutId,
+            date: date,
+            duration: duration,
+            totalDistance: totalDistance,
+            heartRateData: heartRateData,
+            corners: corners.map { $0.coordinate },
+            locationData: locationData
+        )
+    }
+}
+
+// Transfer attempt tracking
+struct TransferAttempt {
+    let data: ValidatedPitchDataTransfer
+    let timestamp: Date
+    let attemptCount: Int
+    let maxRetries: Int = 3
+    let transferMethod: TransferMethod
+    
+    enum TransferMethod {
+        case messageData
+        case userInfo
+        case fileTransfer
+    }
+    
+    var shouldRetry: Bool {
+        attemptCount < maxRetries && Date().timeIntervalSince(timestamp) < 300 // 5 minutes timeout
+    }
+    
+    var nextRetryDelay: TimeInterval {
+        // Exponential backoff: 2^attempt seconds
+        return pow(2.0, Double(attemptCount))
+    }
+}
+
+// Transfer confirmation message
+struct TransferConfirmation: Codable {
+    let transferId: UUID
+    let success: Bool
+    let error: String?
+}
+
+// MARK: - Enhanced Watch Connectivity Manager
 
 class WatchConnectivityManager: NSObject, @preconcurrency WCSessionDelegate {
     static let shared = WatchConnectivityManager()
     private let session: WCSession = .default
+    
+    // Retry mechanism state
+    private var pendingTransfers: [UUID: TransferAttempt] = [:]
+    private let retryQueue = DispatchQueue(label: "connectivity.retry", qos: .utility)
+    private let accessQueue = DispatchQueue(label: "connectivity.access", qos: .userInitiated)
+    
+    // Transfer completion handlers
+    private var transferCompletionHandlers: [UUID: (Result<Void, Error>) -> Void] = [:]
     
     override private init() {
         super.init()
@@ -181,13 +316,19 @@ class WatchConnectivityManager: NSObject, @preconcurrency WCSessionDelegate {
             session.delegate = self
             session.activate()
         }
+        
+        // Start retry timer
+        startRetryTimer()
     }
+    
+    // MARK: - WCSessionDelegate Methods
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if let error = error {
             print("WCSession activation failed with error: \(error.localizedDescription)")
             return
         }
+        
         print("WCSession activated with state: \(activationState.rawValue)")
     }
     
@@ -202,43 +343,340 @@ class WatchConnectivityManager: NSObject, @preconcurrency WCSessionDelegate {
     }
     #endif
     
-    // Legacy method for backward compatibility
-    func sendWorkout(_ workout: WorkoutSessionDTO) {
-        guard WCSession.default.isReachable else {
-            print("WCSession is not reachable.")
-            return
+    // MARK: - Enhanced Data Validation Methods
+    
+    func validatePayload(_ data: Data) -> ValidationResult {
+        // Check minimum data size
+        guard data.count > 0 else {
+            return .invalid("Empty data payload")
         }
         
+        // Check maximum reasonable size (10MB)
+        guard data.count < 10_000_000 else {
+            return .invalid("Payload too large: \(data.count) bytes")
+        }
+        
+        // Attempt to decode as ValidatedPitchDataTransfer
         do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(workout)
-            session.transferUserInfo(["workoutData": data])
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let validatedData = try decoder.decode(ValidatedPitchDataTransfer.self, from: data)
+            
+            // Validate checksum
+            guard validatedData.isValid() else {
+                return .invalid("Checksum validation failed")
+            }
+            
+            // Validate data ranges
+            guard validatedData.duration > 0 else {
+                return .invalid("Invalid workout duration")
+            }
+            
+            guard validatedData.totalDistance >= 0 else {
+                return .invalid("Invalid total distance")
+            }
+            
+            guard validatedData.corners.count == 4 else {
+                return .invalid("Invalid corner count: \(validatedData.corners.count)")
+            }
+            
+            return .valid(validatedData)
+            
         } catch {
-            print("Failed to encode workout session: \(error.localizedDescription)")
+            return .invalid("Failed to decode payload: \(error.localizedDescription)")
         }
     }
     
-    // New method for pitch-based heatmap data
-    func sendPitchData(_ pitchData: PitchDataTransfer) {
-        guard WCSession.default.isReachable else {
-            print("WCSession is not reachable.")
+    enum ValidationResult {
+        case valid(ValidatedPitchDataTransfer)
+        case invalid(String)
+    }
+    
+    // MARK: - Enhanced Send Methods with Retry Logic
+    
+    func sendPitchDataWithRetry(_ pitchData: PitchDataTransfer, completion: @escaping (Result<Void, Error>) -> Void) {
+        let validatedData = ValidatedPitchDataTransfer(from: pitchData)
+        
+        accessQueue.async {
+            // Store completion handler
+            self.transferCompletionHandlers[validatedData.transferId] = completion
+            
+            // Create transfer attempt
+            let attempt = TransferAttempt(
+                data: validatedData,
+                timestamp: Date(),
+                attemptCount: 0,
+                transferMethod: .messageData
+            )
+            
+            self.pendingTransfers[validatedData.transferId] = attempt
+            
+            // Attempt initial transfer
+            self.attemptTransfer(attempt)
+        }
+    }
+    
+    private func attemptTransfer(_ attempt: TransferAttempt) {
+        guard session.activationState == .activated else {
+            retryTransferLater(attempt, error: NSError(domain: "WatchConnectivity", code: -1, userInfo: [NSLocalizedDescriptionKey: "Session not activated"]))
             return
         }
         
         do {
             let encoder = JSONEncoder()
-            let data = try encoder.encode(pitchData)
-            session.sendMessageData(data, replyHandler: nil) { error in
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(attempt.data)
+            
+            switch attempt.transferMethod {
+            case .messageData:
+                attemptMessageDataTransfer(data, attempt: attempt)
+            case .userInfo:
+                attemptUserInfoTransfer(data, attempt: attempt)
+            case .fileTransfer:
+                attemptFileTransfer(data, attempt: attempt)
+            }
+            
+        } catch {
+            retryTransferLater(attempt, error: error)
+        }
+    }
+    
+    private func attemptMessageDataTransfer(_ data: Data, attempt: TransferAttempt) {
+        guard session.isReachable else {
+            // Fall back to userInfo transfer
+            let fallbackAttempt = TransferAttempt(
+                data: attempt.data,
+                timestamp: attempt.timestamp,
+                attemptCount: attempt.attemptCount,
+                transferMethod: .userInfo
+            )
+            attemptTransfer(fallbackAttempt)
+            return
+        }
+        
+        session.sendMessageData(data, replyHandler: { [weak self] replyData in
+            self?.handleTransferSuccess(attempt.data.transferId)
+        }) { [weak self] error in
+            self?.retryTransferLater(attempt, error: error)
+        }
+    }
+    
+    private func attemptUserInfoTransfer(_ data: Data, attempt: TransferAttempt) {
+        let userInfo = [
+            "validatedWorkoutData": data,
+            "transferId": attempt.data.transferId.uuidString
+        ]
+        
+        do {
+            session.transferUserInfo(userInfo)
+            // UserInfo transfers don't have immediate feedback, so we rely on confirmation
+            scheduleTransferTimeout(attempt)
+        } catch {
+            retryTransferLater(attempt, error: error)
+        }
+    }
+    
+    private func attemptFileTransfer(_ data: Data, attempt: TransferAttempt) {
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("workout_\(attempt.data.transferId.uuidString).json")
+        
+        do {
+            try data.write(to: tempURL)
+            session.transferFile(tempURL, metadata: [
+                "transferId": attempt.data.transferId.uuidString,
+                "type": "validatedWorkoutData"
+            ])
+            scheduleTransferTimeout(attempt)
+        } catch {
+            retryTransferLater(attempt, error: error)
+        }
+    }
+    
+    private func scheduleTransferTimeout(_ attempt: TransferAttempt) {
+        retryQueue.asyncAfter(deadline: .now() + 30) { [weak self] in
+            self?.accessQueue.async {
+                // Check if transfer is still pending
+                if self?.pendingTransfers[attempt.data.transferId] != nil {
+                    self?.retryTransferLater(attempt, error: NSError(domain: "WatchConnectivity", code: -2, userInfo: [NSLocalizedDescriptionKey: "Network timeout"]))
+                }
+            }
+        }
+    }
+    
+    private func retryTransferLater(_ attempt: TransferAttempt, error: Error) {
+        guard attempt.shouldRetry else {
+            handleTransferFailure(attempt.data.transferId, error: error)
+            return
+        }
+        
+        let nextAttempt = TransferAttempt(
+            data: attempt.data,
+            timestamp: Date(),
+            attemptCount: attempt.attemptCount + 1,
+            transferMethod: getNextTransferMethod(attempt.transferMethod)
+        )
+        
+        pendingTransfers[attempt.data.transferId] = nextAttempt
+        
+        let delay = attempt.nextRetryDelay
+        print("Retrying transfer \(attempt.data.transferId) in \(delay) seconds (attempt \(nextAttempt.attemptCount))")
+        
+        retryQueue.asyncAfter(deadline: .now() + delay) { [weak self] in
+            self?.attemptTransfer(nextAttempt)
+        }
+    }
+    
+    private func getNextTransferMethod(_ currentMethod: TransferAttempt.TransferMethod) -> TransferAttempt.TransferMethod {
+        switch currentMethod {
+        case .messageData:
+            return .userInfo
+        case .userInfo:
+            return .fileTransfer
+        case .fileTransfer:
+            return .messageData // Cycle back
+        }
+    }
+    
+    private func handleTransferSuccess(_ transferId: UUID) {
+        accessQueue.async {
+            self.pendingTransfers.removeValue(forKey: transferId)
+            if let completion = self.transferCompletionHandlers.removeValue(forKey: transferId) {
+                completion(.success(()))
+            }
+        }
+    }
+    
+    private func handleTransferFailure(_ transferId: UUID, error: Error) {
+        accessQueue.async {
+            self.pendingTransfers.removeValue(forKey: transferId)
+            if let completion = self.transferCompletionHandlers.removeValue(forKey: transferId) {
+                completion(.failure(error))
+            }
+        }
+        
+        print("WatchConnectivity transfer failure for \(transferId): \(error.localizedDescription)")
+    }
+    
+    // MARK: - Retry Timer
+    
+    private func startRetryTimer() {
+        retryQueue.async {
+            Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+                self?.processRetries()
+            }
+        }
+    }
+    
+    private func processRetries() {
+        accessQueue.async {
+            let expiredTransfers = self.pendingTransfers.filter { _, attempt in
+                !attempt.shouldRetry
+            }
+            
+            for (transferId, attempt) in expiredTransfers {
+                self.handleTransferFailure(transferId, error: NSError(domain: "WatchConnectivity", code: -2, userInfo: [NSLocalizedDescriptionKey: "Network timeout"]))
+            }
+        }
+    }
+    
+    // MARK: - Legacy Methods (Backward Compatibility)
+    
+    func sendWorkout(_ workout: WorkoutSessionDTO) {
+        // Convert to new format and use enhanced sending
+        let pitchData = PitchDataTransfer(
+            workoutId: workout.id,
+            date: workout.date,
+            duration: workout.duration,
+            totalDistance: workout.totalDistance,
+            heartRateData: workout.heartRateData,
+            corners: [], // Legacy workouts don't have corners
+            locationData: workout.locationData
+        )
+        
+        sendPitchDataWithRetry(pitchData) { result in
+            switch result {
+            case .success:
+                print("Legacy workout sent successfully")
+            case .failure(let error):
+                print("Failed to send legacy workout: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func sendPitchData(_ pitchData: PitchDataTransfer) {
+        sendPitchDataWithRetry(pitchData) { result in
+            switch result {
+            case .success:
+                print("Pitch data sent successfully")
+            case .failure(let error):
                 print("Failed to send pitch data: \(error.localizedDescription)")
             }
-        } catch {
-            print("Failed to encode pitch data: \(error.localizedDescription)")
         }
     }
     
+    // MARK: - Enhanced Receive Methods
+    
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        guard let data = userInfo["workoutData"] as? Data else { return }
+        // Handle legacy workout data
+        if let data = userInfo["workoutData"] as? Data {
+            handleLegacyWorkoutData(data)
+            return
+        }
         
+        // Handle validated workout data
+        if let data = userInfo["validatedWorkoutData"] as? Data,
+           let transferIdString = userInfo["transferId"] as? String,
+           let transferId = UUID(uuidString: transferIdString) {
+            handleValidatedWorkoutData(data, transferId: transferId)
+            return
+        }
+        
+        print("WatchConnectivity: Unknown userInfo format received")
+    }
+    
+    @MainActor func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
+        let validation = validatePayload(messageData)
+        
+        switch validation {
+        case .valid(let validatedData):
+            processValidatedWorkoutData(validatedData)
+            sendTransferConfirmation(transferId: validatedData.transferId, success: true)
+            
+        case .invalid(let reason):
+            print("WatchConnectivity: Data validation failed - \(reason)")
+        }
+    }
+    
+    func session(_ session: WCSession, didReceive file: WCSessionFile) {
+        guard let transferIdString = file.metadata?["transferId"] as? String,
+              let transferId = UUID(uuidString: transferIdString),
+              file.metadata?["type"] as? String == "validatedWorkoutData" else {
+            ErrorLogger.shared.logError(
+                PivotPlayError.corruptData("Invalid file transfer metadata"),
+                context: ErrorContext(component: "WatchConnectivityManager", operation: "didReceiveFile"),
+                severity: .warning
+            )
+            return
+        }
+        
+        do {
+            let data = try Data(contentsOf: file.fileURL)
+            handleValidatedWorkoutData(data, transferId: transferId)
+            
+            // Clean up temporary file
+            try? FileManager.default.removeItem(at: file.fileURL)
+        } catch {
+            ErrorLogger.shared.logError(
+                error,
+                context: ErrorContext(component: "WatchConnectivityManager", operation: "didReceiveFile"),
+                severity: .error
+            )
+        }
+    }
+    
+    // MARK: - Data Processing Methods
+    
+    private func handleLegacyWorkoutData(_ data: Data) {
         do {
             let decoder = JSONDecoder()
             let workoutDTO = try decoder.decode(WorkoutSessionDTO.self, from: data)
@@ -247,44 +685,98 @@ class WatchConnectivityManager: NSObject, @preconcurrency WCSessionDelegate {
             if let workout = WorkoutSession(from: workoutDTO) {
                 Task {
                     await MainActor.run {
-                        WorkoutStorage.shared.saveWorkout(workout)
+                        let saveResult = WorkoutStorage.shared.saveWorkout(workout)
+                        switch saveResult {
+                        case .success:
+                            ErrorLogger.shared.logDebug("Legacy workout saved successfully", component: "WatchConnectivityManager")
+                        case .failure(let error):
+                            ErrorLogger.shared.logError(error, context: ErrorContext(component: "WatchConnectivityManager", operation: "save legacy workout"), severity: .error)
+                        }
                     }
                 }
             }
             #endif
         } catch {
-            print("Failed to decode workout session: \(error.localizedDescription)")
+            ErrorLogger.shared.logError(
+                PivotPlayError.corruptData("Failed to decode legacy workout: \(error.localizedDescription)"),
+                context: ErrorContext(component: "WatchConnectivityManager", operation: "handleLegacyWorkoutData"),
+                severity: .error
+            )
         }
     }
     
-    @MainActor func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
-        print("Received message data of size \(messageData.count) bytes")
-        do {
-            let decoder = JSONDecoder()
-            let pitchData = try decoder.decode(PitchDataTransfer.self, from: messageData)
-            print("Successfully decoded pitch data for workout \(pitchData.workoutId), with \(pitchData.locationData.count) location points")
-            
-            #if os(iOS)
-            let workout = WorkoutSession(
-                id: pitchData.workoutId,
-                date: pitchData.date,
-                duration: pitchData.duration,
-                totalDistance: pitchData.totalDistance,
-                heartRateData: pitchData.heartRateData,
-                locationData: pitchData.locationData,
-                corners: pitchData.corners
-            )
-            WorkoutStorage.shared.saveWorkout(workout)
-            print("Workout saved successfully")
-            
+    private func handleValidatedWorkoutData(_ data: Data, transferId: UUID) {
+        let validation = validatePayload(data)
+        
+        switch validation {
+        case .valid(let validatedData):
             Task {
                 await MainActor.run {
-                    HeatmapPipeline.shared.ingest(pitchData)
+                    self.processValidatedWorkoutData(validatedData)
                 }
             }
-            #endif
+            sendTransferConfirmation(transferId: transferId, success: true)
+            
+        case .invalid(let reason):
+            ErrorLogger.shared.logError(
+                PivotPlayError.dataValidationFailed(reason),
+                context: ErrorContext(component: "WatchConnectivityManager", operation: "handleValidatedWorkoutData"),
+                severity: .error
+            )
+            sendTransferConfirmation(transferId: transferId, success: false, error: reason)
+        }
+    }
+    
+    @MainActor private func processValidatedWorkoutData(_ validatedData: ValidatedPitchDataTransfer) {
+        #if os(iOS)
+        let workout = WorkoutSession(
+            id: validatedData.workoutId,
+            date: validatedData.date,
+            duration: validatedData.duration,
+            totalDistance: validatedData.totalDistance,
+            heartRateData: validatedData.heartRateData,
+            locationData: validatedData.locationData,
+            corners: validatedData.corners
+        )
+        
+        let saveResult = WorkoutStorage.shared.saveWorkout(workout)
+        switch saveResult {
+        case .success:
+            ErrorLogger.shared.logDebug("Validated workout saved successfully", component: "WatchConnectivityManager")
+            
+            // Process heatmap data
+            Task {
+                await HeatmapPipeline.shared.ingest(validatedData.pitchData)
+            }
+            
+        case .failure(let error):
+            ErrorLogger.shared.logError(error, context: ErrorContext(component: "WatchConnectivityManager", operation: "save validated workout"), severity: .error)
+        }
+        #endif
+    }
+    
+    private func sendTransferConfirmation(transferId: UUID, success: Bool, error: String? = nil) {
+        let confirmation = TransferConfirmation(transferId: transferId, success: success, error: error)
+        
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(confirmation)
+            
+            if session.isReachable {
+                session.sendMessageData(data, replyHandler: nil) { error in
+                    ErrorLogger.shared.logError(
+                        error,
+                        context: ErrorContext(component: "WatchConnectivityManager", operation: "sendTransferConfirmation"),
+                        severity: .warning
+                    )
+                }
+            }
         } catch {
-            print("Failed to decode pitch data: \(error.localizedDescription)")
+            ErrorLogger.shared.logError(
+                error,
+                context: ErrorContext(component: "WatchConnectivityManager", operation: "encode confirmation"),
+                severity: .warning
+            )
         }
     }
 }
