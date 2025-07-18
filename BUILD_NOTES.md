@@ -5,39 +5,45 @@
 - **Main App Scheme**: `PivotPlay` (iOS)
 - **Watch App Scheme**: `PivotPlay Watch App` (watchOS)
 
-## Preferred Build Settings
+## Preferred Build Settings (RECOMMENDED)
 
-### iOS Simulator Build (Preferred: iPhone 16 + Apple Watch Series 10)
+### iOS App Build (Main App)
+- **Scheme:** `PivotPlay`
+- **Simulator:** `Iph16+watch10` (ID: 7F8FDE71-03D1-4061-9A4C-B066855786E6)
+
 ```bash
-# Using MCP XcodeBuild tools - iOS App
-mcp_XcodeBuildMCP_build_sim_name_proj({
+# Build iOS app for paired iPhone+Watch simulator
+mcp_XcodeBuildMCP_build_sim_id_proj({
   projectPath: "/Users/andrei/Code/XCODE/PivotPlay/PivotPlay.xcodeproj",
   scheme: "PivotPlay",
-  simulatorName: "iPhone 16"
-})
-
-# Using MCP XcodeBuild tools - Watch App
-mcp_XcodeBuildMCP_build_sim_name_proj({
-  projectPath: "/Users/andrei/Code/XCODE/PivotPlay/PivotPlay.xcodeproj",
-  scheme: "PivotPlay Watch App",
-  simulatorName: "Apple Watch Series 10 (45mm)"
+  simulatorId: "7F8FDE71-03D1-4061-9A4C-B066855786E6"
 })
 ```
 
-### Manual xcodebuild Commands
+### Watch App Build (Standalone)
+- **Scheme:** `PivotPlay Watch App`
+- **Simulator:** `Apple Watch Series 10 (46mm)` (ID: 36AE1D63-0563-4F4A-9F6A-7525C4BF40FD)
+
 ```bash
-# Build for iOS Simulator (iPhone 16)
-xcodebuild build -project PivotPlay.xcodeproj -scheme PivotPlay -destination 'platform=iOS Simulator,name=iPhone 16'
+# Build watchOS app for Apple Watch simulator
+mcp_XcodeBuildMCP_build_sim_id_proj({
+  projectPath: "/Users/andrei/Code/XCODE/PivotPlay/PivotPlay.xcodeproj",
+  scheme: "PivotPlay Watch App",
+  simulatorId: "36AE1D63-0563-4F4A-9F6A-7525C4BF40FD"
+})
+```
 
-# Build for watchOS Simulator (Apple Watch Series 10)
-xcodebuild build -project PivotPlay.xcodeproj -scheme "PivotPlay Watch App" -destination 'platform=watchOS Simulator,name=Apple Watch Series 10 (45mm)'
+## Manual xcodebuild Commands (for reference)
+```bash
+# Build for iOS Simulator (paired iPhone+Watch)
+xcodebuild build -project PivotPlay.xcodeproj -scheme PivotPlay -destination 'platform=iOS Simulator,id=7F8FDE71-03D1-4061-9A4C-B066855786E6'
 
-# List available targets and schemes
-xcodebuild -project PivotPlay.xcodeproj -list
+# Build for watchOS Simulator (Apple Watch Series 10 46mm)
+xcodebuild build -project PivotPlay.xcodeproj -scheme "PivotPlay Watch App" -destination 'platform=watchOS Simulator,id=36AE1D63-0563-4F4A-9F6A-7525C4BF40FD'
 ```
 
 ## Build Status
-- ✅ Main app builds successfully
+- ✅ Main app builds successfully (after removing duplicate WorkoutSession definition)
 - ⚠️ Test scheme not configured (tests exist in PivotPlayTests/ but not integrated into build scheme)
 - ⚠️ Minor AppIntents metadata warning (can be ignored)
 
@@ -47,7 +53,7 @@ xcodebuild -project PivotPlay.xcodeproj -list
 - Ready to proceed with Task 2: WorkoutStorage fixes
 
 ## Last Successful Build
-- Date: 2025-07-15
+- Date: 2025-07-18
 - Scheme: PivotPlay
-- Target: iOS Simulator (iPhone 16)
+- Target: iOS Simulator (Iph16+watch10)
 - Status: ✅ Success

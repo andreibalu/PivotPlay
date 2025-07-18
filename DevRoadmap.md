@@ -1,3 +1,14 @@
+# Build Setup
+
+- **iOS App:**
+  - Scheme: `PivotPlay`
+  - Simulator: `Iph16+watch10` (ID: 7F8FDE71-03D1-4061-9A4C-B066855786E6)
+- **watchOS App:**
+  - Scheme: `PivotPlay Watch App`
+  - Simulator: `Apple Watch Series 10 (46mm)` (ID: 36AE1D63-0563-4F4A-9F6A-7525C4BF40FD)
+
+Use these schemes and simulators for all builds. See BUILD_NOTES.md for command details.
+
 ### **PivotPlay MVP Roadmap**
 
 This roadmap outlines the core milestones to build a functional Minimum Viable Product (MVP) for the PivotPlay app, focusing on the essential features for both the watchOS and iOS platforms.
