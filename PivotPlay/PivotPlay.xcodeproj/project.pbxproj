@@ -1,0 +1,1040 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		755CE1D82E8C256A009219FA /* WatchPivotPlay Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 755CE1B82E8C2566009219FA /* WatchPivotPlay Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		755CE1982E8C2555009219FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755CE1802E8C2552009219FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 755CE1872E8C2552009219FA;
+			remoteInfo = PivotPlay;
+		};
+		755CE1A22E8C2555009219FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755CE1802E8C2552009219FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 755CE1872E8C2552009219FA;
+			remoteInfo = PivotPlay;
+		};
+		755CE1C52E8C256A009219FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755CE1802E8C2552009219FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 755CE1B72E8C2566009219FA;
+			remoteInfo = "WatchPivotPlay Watch App";
+		};
+		755CE1CF2E8C256A009219FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755CE1802E8C2552009219FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 755CE1B72E8C2566009219FA;
+			remoteInfo = "WatchPivotPlay Watch App";
+		};
+		755CE1D62E8C256A009219FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755CE1802E8C2552009219FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 755CE1B72E8C2566009219FA;
+			remoteInfo = "WatchPivotPlay Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		755CE1DC2E8C256A009219FA /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				755CE1D82E8C256A009219FA /* WatchPivotPlay Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		755CE1882E8C2552009219FA /* PivotPlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PivotPlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		755CE1972E8C2555009219FA /* PivotPlayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PivotPlayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		755CE1A12E8C2555009219FA /* PivotPlayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PivotPlayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		755CE1B82E8C2566009219FA /* WatchPivotPlay Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WatchPivotPlay Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		755CE1C42E8C256A009219FA /* WatchPivotPlay Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WatchPivotPlay Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		755CE1CE2E8C256A009219FA /* WatchPivotPlay Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WatchPivotPlay Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		755CE1E52E8C2666009219FA /* Exceptions for "PivotPlay" folder in "PivotPlay" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 755CE1872E8C2552009219FA /* PivotPlay */;
+		};
+		755CE1E82E8C2796009219FA /* Exceptions for "WatchPivotPlay Watch App" folder in "WatchPivotPlay Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"WatchPivotPlay-Watch-App-Info.plist",
+			);
+			target = 755CE1B72E8C2566009219FA /* WatchPivotPlay Watch App */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		755CE18A2E8C2552009219FA /* PivotPlay */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				755CE1E52E8C2666009219FA /* Exceptions for "PivotPlay" folder in "PivotPlay" target */,
+			);
+			path = PivotPlay;
+			sourceTree = "<group>";
+		};
+		755CE19A2E8C2555009219FA /* PivotPlayTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PivotPlayTests;
+			sourceTree = "<group>";
+		};
+		755CE1A42E8C2555009219FA /* PivotPlayUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PivotPlayUITests;
+			sourceTree = "<group>";
+		};
+		755CE1B92E8C2566009219FA /* WatchPivotPlay Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				755CE1E82E8C2796009219FA /* Exceptions for "WatchPivotPlay Watch App" folder in "WatchPivotPlay Watch App" target */,
+			);
+			path = "WatchPivotPlay Watch App";
+			sourceTree = "<group>";
+		};
+		755CE1C72E8C256A009219FA /* WatchPivotPlay Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "WatchPivotPlay Watch AppTests";
+			sourceTree = "<group>";
+		};
+		755CE1D12E8C256A009219FA /* WatchPivotPlay Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "WatchPivotPlay Watch AppUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		755CE1852E8C2552009219FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1942E8C2555009219FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE19E2E8C2555009219FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1B52E8C2566009219FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1C12E8C256A009219FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1CB2E8C256A009219FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		755CE17F2E8C2552009219FA = {
+			isa = PBXGroup;
+			children = (
+				755CE18A2E8C2552009219FA /* PivotPlay */,
+				755CE19A2E8C2555009219FA /* PivotPlayTests */,
+				755CE1A42E8C2555009219FA /* PivotPlayUITests */,
+				755CE1B92E8C2566009219FA /* WatchPivotPlay Watch App */,
+				755CE1C72E8C256A009219FA /* WatchPivotPlay Watch AppTests */,
+				755CE1D12E8C256A009219FA /* WatchPivotPlay Watch AppUITests */,
+				755CE1892E8C2552009219FA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		755CE1892E8C2552009219FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				755CE1882E8C2552009219FA /* PivotPlay.app */,
+				755CE1972E8C2555009219FA /* PivotPlayTests.xctest */,
+				755CE1A12E8C2555009219FA /* PivotPlayUITests.xctest */,
+				755CE1B82E8C2566009219FA /* WatchPivotPlay Watch App.app */,
+				755CE1C42E8C256A009219FA /* WatchPivotPlay Watch AppTests.xctest */,
+				755CE1CE2E8C256A009219FA /* WatchPivotPlay Watch AppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		755CE1872E8C2552009219FA /* PivotPlay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 755CE1AB2E8C2555009219FA /* Build configuration list for PBXNativeTarget "PivotPlay" */;
+			buildPhases = (
+				755CE1842E8C2552009219FA /* Sources */,
+				755CE1852E8C2552009219FA /* Frameworks */,
+				755CE1862E8C2552009219FA /* Resources */,
+				755CE1DC2E8C256A009219FA /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				755CE1D72E8C256A009219FA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				755CE18A2E8C2552009219FA /* PivotPlay */,
+			);
+			name = PivotPlay;
+			packageProductDependencies = (
+			);
+			productName = PivotPlay;
+			productReference = 755CE1882E8C2552009219FA /* PivotPlay.app */;
+			productType = "com.apple.product-type.application";
+		};
+		755CE1962E8C2555009219FA /* PivotPlayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 755CE1AE2E8C2555009219FA /* Build configuration list for PBXNativeTarget "PivotPlayTests" */;
+			buildPhases = (
+				755CE1932E8C2555009219FA /* Sources */,
+				755CE1942E8C2555009219FA /* Frameworks */,
+				755CE1952E8C2555009219FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				755CE1992E8C2555009219FA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				755CE19A2E8C2555009219FA /* PivotPlayTests */,
+			);
+			name = PivotPlayTests;
+			packageProductDependencies = (
+			);
+			productName = PivotPlayTests;
+			productReference = 755CE1972E8C2555009219FA /* PivotPlayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		755CE1A02E8C2555009219FA /* PivotPlayUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 755CE1B12E8C2555009219FA /* Build configuration list for PBXNativeTarget "PivotPlayUITests" */;
+			buildPhases = (
+				755CE19D2E8C2555009219FA /* Sources */,
+				755CE19E2E8C2555009219FA /* Frameworks */,
+				755CE19F2E8C2555009219FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				755CE1A32E8C2555009219FA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				755CE1A42E8C2555009219FA /* PivotPlayUITests */,
+			);
+			name = PivotPlayUITests;
+			packageProductDependencies = (
+			);
+			productName = PivotPlayUITests;
+			productReference = 755CE1A12E8C2555009219FA /* PivotPlayUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		755CE1B72E8C2566009219FA /* WatchPivotPlay Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 755CE1D92E8C256A009219FA /* Build configuration list for PBXNativeTarget "WatchPivotPlay Watch App" */;
+			buildPhases = (
+				755CE1B42E8C2566009219FA /* Sources */,
+				755CE1B52E8C2566009219FA /* Frameworks */,
+				755CE1B62E8C2566009219FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				755CE1B92E8C2566009219FA /* WatchPivotPlay Watch App */,
+			);
+			name = "WatchPivotPlay Watch App";
+			packageProductDependencies = (
+			);
+			productName = "WatchPivotPlay Watch App";
+			productReference = 755CE1B82E8C2566009219FA /* WatchPivotPlay Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		755CE1C32E8C256A009219FA /* WatchPivotPlay Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 755CE1DD2E8C256A009219FA /* Build configuration list for PBXNativeTarget "WatchPivotPlay Watch AppTests" */;
+			buildPhases = (
+				755CE1C02E8C256A009219FA /* Sources */,
+				755CE1C12E8C256A009219FA /* Frameworks */,
+				755CE1C22E8C256A009219FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				755CE1C62E8C256A009219FA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				755CE1C72E8C256A009219FA /* WatchPivotPlay Watch AppTests */,
+			);
+			name = "WatchPivotPlay Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "WatchPivotPlay Watch AppTests";
+			productReference = 755CE1C42E8C256A009219FA /* WatchPivotPlay Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		755CE1CD2E8C256A009219FA /* WatchPivotPlay Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 755CE1E02E8C256A009219FA /* Build configuration list for PBXNativeTarget "WatchPivotPlay Watch AppUITests" */;
+			buildPhases = (
+				755CE1CA2E8C256A009219FA /* Sources */,
+				755CE1CB2E8C256A009219FA /* Frameworks */,
+				755CE1CC2E8C256A009219FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				755CE1D02E8C256A009219FA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				755CE1D12E8C256A009219FA /* WatchPivotPlay Watch AppUITests */,
+			);
+			name = "WatchPivotPlay Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "WatchPivotPlay Watch AppUITests";
+			productReference = 755CE1CE2E8C256A009219FA /* WatchPivotPlay Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		755CE1802E8C2552009219FA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					755CE1872E8C2552009219FA = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					755CE1962E8C2555009219FA = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 755CE1872E8C2552009219FA;
+					};
+					755CE1A02E8C2555009219FA = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 755CE1872E8C2552009219FA;
+					};
+					755CE1B72E8C2566009219FA = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					755CE1C32E8C256A009219FA = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 755CE1B72E8C2566009219FA;
+					};
+					755CE1CD2E8C256A009219FA = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 755CE1B72E8C2566009219FA;
+					};
+				};
+			};
+			buildConfigurationList = 755CE1832E8C2552009219FA /* Build configuration list for PBXProject "PivotPlay" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 755CE17F2E8C2552009219FA;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 755CE1892E8C2552009219FA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				755CE1872E8C2552009219FA /* PivotPlay */,
+				755CE1962E8C2555009219FA /* PivotPlayTests */,
+				755CE1A02E8C2555009219FA /* PivotPlayUITests */,
+				755CE1B72E8C2566009219FA /* WatchPivotPlay Watch App */,
+				755CE1C32E8C256A009219FA /* WatchPivotPlay Watch AppTests */,
+				755CE1CD2E8C256A009219FA /* WatchPivotPlay Watch AppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		755CE1862E8C2552009219FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1952E8C2555009219FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE19F2E8C2555009219FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1B62E8C2566009219FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1C22E8C256A009219FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1CC2E8C256A009219FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		755CE1842E8C2552009219FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1932E8C2555009219FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE19D2E8C2555009219FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1B42E8C2566009219FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1C02E8C256A009219FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755CE1CA2E8C256A009219FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		755CE1992E8C2555009219FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 755CE1872E8C2552009219FA /* PivotPlay */;
+			targetProxy = 755CE1982E8C2555009219FA /* PBXContainerItemProxy */;
+		};
+		755CE1A32E8C2555009219FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 755CE1872E8C2552009219FA /* PivotPlay */;
+			targetProxy = 755CE1A22E8C2555009219FA /* PBXContainerItemProxy */;
+		};
+		755CE1C62E8C256A009219FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 755CE1B72E8C2566009219FA /* WatchPivotPlay Watch App */;
+			targetProxy = 755CE1C52E8C256A009219FA /* PBXContainerItemProxy */;
+		};
+		755CE1D02E8C256A009219FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 755CE1B72E8C2566009219FA /* WatchPivotPlay Watch App */;
+			targetProxy = 755CE1CF2E8C256A009219FA /* PBXContainerItemProxy */;
+		};
+		755CE1D72E8C256A009219FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 755CE1B72E8C2566009219FA /* WatchPivotPlay Watch App */;
+			targetProxy = 755CE1D62E8C256A009219FA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		755CE1A92E8C2555009219FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		755CE1AA2E8C2555009219FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		755CE1AC2E8C2555009219FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PivotPlay/PivotPlay.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PivotPlay/Info.plist;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Pivotplay requires access to Health readings in order to properly read previous football sessions";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Pivotplay requires access to write in Health in order to properly save football sessions";
+				INFOPLIST_KEY_NSMotionUsageDescription = "PivotPlay requires access to the device's motion data in order to improve accuracy";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = baludev.PivotPlay;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		755CE1AD2E8C2555009219FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PivotPlay/PivotPlay.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PivotPlay/Info.plist;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Pivotplay requires access to Health readings in order to properly read previous football sessions";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Pivotplay requires access to write in Health in order to properly save football sessions";
+				INFOPLIST_KEY_NSMotionUsageDescription = "PivotPlay requires access to the device's motion data in order to improve accuracy";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = baludev.PivotPlay;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		755CE1AF2E8C2555009219FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = baludev.PivotPlayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PivotPlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PivotPlay";
+			};
+			name = Debug;
+		};
+		755CE1B02E8C2555009219FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = baludev.PivotPlayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PivotPlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PivotPlay";
+			};
+			name = Release;
+		};
+		755CE1B22E8C2555009219FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = baludev.PivotPlayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PivotPlay;
+			};
+			name = Debug;
+		};
+		755CE1B32E8C2555009219FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = baludev.PivotPlayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PivotPlay;
+			};
+			name = Release;
+		};
+		755CE1DA2E8C256A009219FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "WatchPivotPlay Watch App/WatchPivotPlay Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WatchPivotPlay-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = WatchPivotPlay;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Pivotplay requires access to Health readings in order to properly read previous football sessions";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Pivotplay requires access to Health readings in order to properly save football sessions";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = baludev.PivotPlay;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = baludev.PivotPlay.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		755CE1DB2E8C256A009219FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "WatchPivotPlay Watch App/WatchPivotPlay Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WatchPivotPlay-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = WatchPivotPlay;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Pivotplay requires access to Health readings in order to properly read previous football sessions";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Pivotplay requires access to Health readings in order to properly save football sessions";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = baludev.PivotPlay;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = baludev.PivotPlay.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		755CE1DE2E8C256A009219FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "baludev.WatchPivotPlay-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WatchPivotPlay Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WatchPivotPlay Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		755CE1DF2E8C256A009219FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "baludev.WatchPivotPlay-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WatchPivotPlay Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WatchPivotPlay Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		755CE1E12E8C256A009219FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "baludev.WatchPivotPlay-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "WatchPivotPlay Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		755CE1E22E8C256A009219FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WR23UX8DY4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "baludev.WatchPivotPlay-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "WatchPivotPlay Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		755CE1832E8C2552009219FA /* Build configuration list for PBXProject "PivotPlay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755CE1A92E8C2555009219FA /* Debug */,
+				755CE1AA2E8C2555009219FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		755CE1AB2E8C2555009219FA /* Build configuration list for PBXNativeTarget "PivotPlay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755CE1AC2E8C2555009219FA /* Debug */,
+				755CE1AD2E8C2555009219FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		755CE1AE2E8C2555009219FA /* Build configuration list for PBXNativeTarget "PivotPlayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755CE1AF2E8C2555009219FA /* Debug */,
+				755CE1B02E8C2555009219FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		755CE1B12E8C2555009219FA /* Build configuration list for PBXNativeTarget "PivotPlayUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755CE1B22E8C2555009219FA /* Debug */,
+				755CE1B32E8C2555009219FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		755CE1D92E8C256A009219FA /* Build configuration list for PBXNativeTarget "WatchPivotPlay Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755CE1DA2E8C256A009219FA /* Debug */,
+				755CE1DB2E8C256A009219FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		755CE1DD2E8C256A009219FA /* Build configuration list for PBXNativeTarget "WatchPivotPlay Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755CE1DE2E8C256A009219FA /* Debug */,
+				755CE1DF2E8C256A009219FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		755CE1E02E8C256A009219FA /* Build configuration list for PBXNativeTarget "WatchPivotPlay Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755CE1E12E8C256A009219FA /* Debug */,
+				755CE1E22E8C256A009219FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 755CE1802E8C2552009219FA /* Project object */;
+}
